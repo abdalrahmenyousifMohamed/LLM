@@ -1,0 +1,6 @@
+Running on local URL:  http://0.0.0.0:8884
+To create a public link, set `share=True` in `launch()`.
+
+[34m[1mwandb[39m[22m:   6 of 6 files downloaded.
+[34m[1mwandb[39m[22m:   1 of 1 files downloaded.
+Keyboard interruption in main thread... closing server.

@@ -1,0 +1,66 @@
+
+'We have 228 real queries:'
+[4179, 365, 1206, 2596, 2940, 537, 956, 803, 1644, 2529, 2093]
+I have a question about exporting CSV files from a web panel. Whenever I do this, I always get two extra columns for MAX and MIN values, even if I only have one data curve. Does anyone know how to solve this issue?
+Hi How can I move a column in a table to the right?
+I have a question about sweeps. How can you constrain relationship between parameters. For example, I now that if num_layers * hidden_dim is large, I'll run out of GPU memory. So, also I would like to explore some hyperparameter space, there are some combination I know will fail. optuna as a way to do that: you can throw an special exception to cancel a run during a sweep, so that it is not recorded. Is there something similar in W&B, or another way of pruning unwanted combination of hyperparameters?
+ Where do I find the wandb run id?
+I
+I am looking to finetune LLAMA on my own dataset using OpenAI, can you give me examples on how to do this?
+can I make a project publicly viewable?
+I'm getting a "Importing a module script failed. An application error occurred." error on a computer, but the same link works on my phone.
+Weights & Biases integration with Gradio works within a Jupyter Notebook but not with the same code run as a Python script. Why is this the case?
+@wandbot (beta). I'm using a free account. How can I share the my existing personal project with others?  Your past instruction "Move your personal project to the team by going to the project's settings page and changing the "Owner" to the team you created." didn't work. Actually, I could not find the bottom. Could you please show me the way of sharing my existing project with others step by step?
+I am looking to finetune LLAMA on my own dataset using OpenAI, can you give me examples on how to do this?
+Hi.
+I'm running a sweep on some hyper-parameter (let's say learning_rate).
+ In each run, I  obtain two lists of length 10 : (1) validation set rewards and (2) test set rewards.
+I want to obtain a box plot where the x-axis is the hyper-parameter (learning_rate), and the box is calculated via the corresponding list (validation/test rewards)
+how do i use artifacts references?
+why am I getting an error
+__init__() got an unexpected keyword argument 'no_args_is_help'
+when I try to run wandb on a server for a cloud GPU? Wandb works fine on my own computer.
+How can I log my results in my team profile and not in my personal profile?
+can you tell me how to use W&B sweep together with pytorch's DistributedDataParallel
+ I have only one artifact  and i'm pulling it by using :latest alias. probably the deleted data is stored in cache.  how do i sync cache ?
+is there a good way to use sweeps and launch?
+how can i get the data from my wandb run by querying my logs using python?
+I can see a table in the Wandb UI via a `text_table` chart, but when I try to view it via `runs.summary["<table name>"]`  I get "No rows to display". What am I doing wrong?
+ Is there a way to download a public W&B artifact without the requirement of W&B API key ?
+For a new Weights & Biases user, what are the 5 most important pages to read in the Weights & Biases documentation?
+How should I solve this problem occured when I want to upload the training results to the server
+how can I share the my existing personal project with others?
+i requested my data using the python api and saw that most of the data returned is None, even though I see the data on the dashboard- why is that?
+How to export a single chart's data using the API? @wandbot (beta)
+how do I log images to weights and biases?
+I would like to finish a run and remove all hooks that may be attached to my torch modules and remove any other affects that wandb might still has on my code after calling wand.finish(). How do i do that?
+can I add some string to the random run name that is created with wandb.init() ?
+how do I utilize Weights & Biases LangChain integration>?
+I have the following code, which finds a sweep by the sweep's display name and then gets the runs associated with it.
+```
+def get_sweeps_by_sweep_name(entity, project, sweep_name, require_unique = True):
+    sweep_ids = []
+    for sweep in api.from_path(f"{entity}/{project}").sweeps():
+        if sweep.name == sweep_name:
+            sweep_ids.append(sweep.id)
+    if require_unique == True and len(sweep_ids) > 1:
+        raise ValueError("There are multiple sweeps with the same name")
+    return sweep_ids # singular if require_unique == True
+def get_runs_by_sweep_name(entity, project, sweep_name):
+    sweep_ids = get_sweeps_by_sweep_name(entity, project, sweep_name, require_unique = True)
+    return api.runs(f"{entity}/{project}", filters={"sweep": sweep_ids[0]})
+# call with
+sweepruns = get_runs_by_sweep_name("MYENTITY", "MYPROJECT", "MYRUNNAME1")
+```
+Is there a better way to do this, maybe with just a single filter?
+Hi I have created an academic team, however I don't have admin rights in my own group and cannot access admin features at all
+I am logging the score of my LightGBM regression model by doing `run = wandb.init(project=project_name)` and then `wandb.log({'dev_score': dev_score})`. The problem is that it is logged as a chart with step-score x-y axes, and I only want the scalar value. As I do not have steps, it is difficult to visualize the score. How can I add a Scalar chart instead?
+is there a good way to join 2 tables together programmatically?
+how do I utilize Weights & Biases LangChain integration>?
+how do i retrieve tables from the my run history
+how can i get all the versions of an aritfact of a particular type?
+I am trying to log an image but it's not appearing online. I am creating an Image object from RGBA data and then using wandb.log with commit=True. Logging of other images in the same project works, just this one does not. What could the problem be?
+What are the risk of supplying proprietary data into a third party cloud provider such as amazon cloud services compared to google cloud platform
+Hi I have created an academic team, however I don't have admin rights in my own group and cannot access admin features at all
+how to i create the weights and biases logo in ascii art?
+I'm trying to run a random sweep for my llm model, but struggling to get it working.

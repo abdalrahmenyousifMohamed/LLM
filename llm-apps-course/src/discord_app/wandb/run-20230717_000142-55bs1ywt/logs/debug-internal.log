@@ -1,0 +1,50 @@
+2023-07-17 00:01:42,029 INFO    StreamThr :15864 [internal.py:wandb_internal():86] W&B internal server running at pid: 15864, started at: 2023-07-17 00:01:42.029501
+2023-07-17 00:01:42,031 DEBUG   HandlerThread:15864 [handler.py:handle_request():144] handle_request: status
+2023-07-17 00:01:42,036 INFO    WriterThread:15864 [datastore.py:open_for_write():85] open: /Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/discord_app/wandb/run-20230717_000142-55bs1ywt/run-55bs1ywt.wandb
+2023-07-17 00:01:42,036 DEBUG   SenderThread:15864 [sender.py:send():369] send: header
+2023-07-17 00:01:42,051 DEBUG   SenderThread:15864 [sender.py:send():369] send: run
+2023-07-17 00:01:42,052 INFO    SenderThread:15864 [sender.py:_maybe_setup_resume():737] checking resume status for wandbot/wandbbot/55bs1ywt
+2023-07-17 00:01:42,765 ERROR   SenderThread:15864 [internal_api.py:execute():324] 404 response executing GraphQL.
+2023-07-17 00:01:42,766 ERROR   SenderThread:15864 [internal_api.py:execute():325] {"errors":[{"message":"project not found","path":["upsertBucket"]}],"data":{"upsertBucket":null}}
+2023-07-17 00:01:42,766 ERROR   SenderThread:15864 [sender.py:send_run():955] It appears that you do not have permission to access the requested resource. Please reach out to the project owner to grant you access. If you have the correct permissions, verify that there are no issues with your networking setup.(Error 404: Not Found)
+Traceback (most recent call last):
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/lib/retry.py", line 131, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/internal/internal_api.py", line 321, in execute
+    return self.client.execute(*args, **kwargs)  # type: ignore
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/lib/gql_request.py", line 56, in execute
+    request.raise_for_status()
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://api.wandb.ai/graphql
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/internal/sender.py", line 953, in send_run
+    self._init_run(run, config_value_dict)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/internal/sender.py", line 991, in _init_run
+    server_run, inserted, server_messages = self._api.upsert_run(
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/apis/normalize.py", line 73, in wrapper
+    raise err
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/apis/normalize.py", line 41, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/internal/internal_api.py", line 1822, in upsert_run
+    response = self.gql(
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/internal/internal_api.py", line 293, in gql
+    ret = self._retry_gql(
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/lib/retry.py", line 147, in __call__
+    retry_timedelta_triggered = check_retry_fn(e)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/util.py", line 946, in check_retry_fn
+    return fallback_retry_fn(e)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/util.py", line 888, in no_retry_auth
+    raise CommError(
+wandb.errors.CommError: It appears that you do not have permission to access the requested resource. Please reach out to the project owner to grant you access. If you have the correct permissions, verify that there are no issues with your networking setup.(Error 404: Not Found)
+2023-07-17 00:01:43,032 DEBUG   HandlerThread:15864 [handler.py:handle_request():144] handle_request: shutdown
+2023-07-17 00:01:43,032 INFO    HandlerThread:15864 [handler.py:finish():854] shutting down handler
+2023-07-17 00:01:43,055 INFO    WriterThread:15864 [datastore.py:close():298] close: /Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/discord_app/wandb/run-20230717_000142-55bs1ywt/run-55bs1ywt.wandb
+2023-07-17 00:01:43,779 INFO    SenderThread:15864 [sender.py:finish():1526] shutting down sender

@@ -1,0 +1,33 @@
+{
+    "os": "macOS-13.2.1-arm64-arm-64bit",
+    "python": "3.8.16",
+    "heartbeatAt": "2023-07-15T23:39:19.225097",
+    "startedAt": "2023-07-15T23:39:16.736359",
+    "docker": null,
+    "cuda": null,
+    "args": null,
+    "state": "running",
+    "program": "notebooks/03. Retrieval.ipynb",
+    "root": "/Users/pepo_abdo",
+    "git": {
+        "remote": null,
+        "commit": null
+    },
+    "email": "abdalrahmenyousif@std.mans.edu.eg",
+    "host": "pepos-MacBook-Pro.local",
+    "username": "pepo_abdo",
+    "executable": "/Users/pepo_abdo/miniforge3/envs/torch-gpu/bin/python",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "disk": {
+        "total": 460.4317207336426,
+        "used": 227.5851821899414
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 16.0
+    }
+}

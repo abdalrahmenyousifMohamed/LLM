@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/wandb_config.py", line 162, in __getattr__
+    return self.__getitem__(key)
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/wandb_config.py", line 130, in __getitem__
+    return self._items[key]
+KeyError: 'faiss_artifact'
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "main.py", line 155, in <module>
+    chat = Chat(model_name=default_config.model_name, wandb_run=wandb_run)
+  File "/Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/chat.py", line 178, in __init__
+    self.vector_store, self.chat_prompt = load_vector_store_and_prompt(
+  File "/Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/chat.py", line 118, in load_vector_store_and_prompt
+    artifacts = load_artifacts(config)
+  File "/Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/chat.py", line 58, in load_artifacts
+    faiss_artifact = wandb.use_artifact(config.faiss_artifact, type="search_index")
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/wandb_config.py", line 164, in __getattr__
+    raise AttributeError(
+AttributeError: <class 'wandb.sdk.wandb_config.Config'> object has no attribute 'faiss_artifact'
+Exception ignored in: <module 'threading' from '/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/threading.py'>
+Traceback (most recent call last):
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/threading.py", line 1388, in _shutdown
+    lock.acquire()
+KeyboardInterrupt:
+JOINING APPEND TABLE

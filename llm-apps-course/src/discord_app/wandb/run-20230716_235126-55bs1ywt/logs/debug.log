@@ -1,0 +1,27 @@
+2023-07-16 23:51:26,432 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Current SDK version is 0.15.5
+2023-07-16 23:51:26,432 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Configure stats pid to 15614
+2023-07-16 23:51:26,432 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Loading settings from /Users/pepo_abdo/.config/wandb/settings
+2023-07-16 23:51:26,432 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Loading settings from /Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/discord_app/wandb/settings
+2023-07-16 23:51:26,432 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'src/wandbot/discord_app/main.py', 'program': 'main.py'}
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_init.py:_log_setup():507] Logging user logs to /Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/discord_app/wandb/run-20230716_235126-55bs1ywt/logs/debug.log
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_init.py:_log_setup():508] Logging internal logs to /Users/pepo_abdo/Desktop/ml/AI/LLM/wandbot/src/wandbot/discord_app/wandb/run-20230716_235126-55bs1ywt/logs/debug-internal.log
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_init.py:init():547] calling init triggers
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_init.py:init():554] wandb.init called with sweep_config: {}
+config: {'faiss_artifact': 'parambharat/wandb_docs_bot/faiss_store:latest', 'hyde_prompt_artifact': 'parambharat/wandb_docs_bot/hyde_prompt:latest', 'chat_prompt_artifact': 'parambharat/wandb_docs_bot/system_prompt:latest', 'model_name': 'gpt-4'}
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_init.py:init():596] starting backend
+2023-07-16 23:51:26,433 INFO    MainThread:15614 [wandb_init.py:init():600] setting up manager
+2023-07-16 23:51:26,439 INFO    MainThread:15614 [backend.py:_multiprocessing_setup():106] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2023-07-16 23:51:26,444 INFO    MainThread:15614 [wandb_init.py:init():606] backend started and connected
+2023-07-16 23:51:26,449 INFO    MainThread:15614 [wandb_init.py:init():705] updated telemetry
+2023-07-16 23:51:26,464 INFO    MainThread:15614 [wandb_init.py:init():738] communicating run to backend with 60.0 second timeout
+2023-07-16 23:51:27,241 ERROR   MainThread:15614 [wandb_init.py:init():764] encountered error: It appears that you do not have permission to access the requested resource. Please reach out to the project owner to grant you access. If you have the correct permissions, verify that there are no issues with your networking setup.(Error 404: Not Found)
+2023-07-16 23:51:27,561 ERROR   MainThread:15614 [wandb_init.py:init():1172] It appears that you do not have permission to access the requested resource. Please reach out to the project owner to grant you access. If you have the correct permissions, verify that there are no issues with your networking setup.(Error 404: Not Found)
+Traceback (most recent call last):
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1154, in init
+    run = wi.init()
+  File "/Users/pepo_abdo/miniforge3/envs/torch-gpu/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 770, in init
+    raise error
+wandb.errors.CommError: It appears that you do not have permission to access the requested resource. Please reach out to the project owner to grant you access. If you have the correct permissions, verify that there are no issues with your networking setup.(Error 404: Not Found)
+2023-07-16 23:51:28,569 WARNING MsgRouterThr:15614 [router.py:message_loop():77] message_loop has been closed

@@ -1,0 +1,512 @@
+context,question,answer
+"A user might be trying to train an image classification model using PyTorch and logging the results with W&B.
+","I'm building an image classification model using PyTorch and I want to log my training and validation loss and accuracy using W&B. Can anyone tell me how to configure my PyTorch model and use W&B to log my metrics?
+","You can use the PyTorch lightning integration for W&B and follow the following steps to configure your PyTorch model and log training and validation loss and accuracy.
+
+1. Define your PyTorch model and inherit from `pl.LightningModule`.
+2. Implement the `forward` method to define your neural network.
+3. Implement the `training_step` method to calculate loss and log the training loss and accuracy. Remember to call `self.log` function to log your metrics.
+4. Implement the `validation_step` method to calculate loss and accuracy and log your metrics.
+5. Implement the `configure_optimizers` method to define your optimizer.
+6. Use `wandb.init()` to initialize your W&B run.
+7. Use `wandb_logger = WandbLogger()` to define a W&B logger.
+8. Use `trainer = pl.Trainer(logger=wandb_logger)` to define your PyTorch Lightning trainer and pass the W&B logger.
+9. Call `trainer.fit(model)` to train your model and log your metrics to W&B.
+
+You can also define your metric using `wandb.define_metric` to specify the summary visualization and the min/max direction to match your needs."
+"A user is trying to understand the code for a neural network model that was trained using Weights & Biases and saved on the W&B cloud. They want to know how to download this trained model and load it to make predictions on new data.
+","How can I export a trained model from Weights & Biases cloud and load it to make predictions on new data?
+","To download your trained model from Weights & Biases cloud, you can use W&B Artifacts. First, download the latest version of the model artifact by running `artifact = run.use_artifact('<artifact_name>:latest')`, where `<artifact_name>` is the name you gave to the model artifact when you logged it during training. Then you can download the artifact files by running `artifact.download()`, which will download all the files in the artifact directory to your local machine. To load the model, you can use the PyTorch `load_state_dict()` method and pass it the state dictionary saved during training. Here's an example:
+
+```
+import torch
+from model import MyModel
+
+# Create an instance of your model architecture
+model = MyModel()
+
+# Download the latest version of the model artifact
+artifact = run.use_artifact('<artifact_name>:latest')
+artifact.download()
+
+# Load the state dictionary saved during training
+state_dict = torch.load('artifact_dir/path/to/state_dict.pt')
+
+# Load the state_dict into your model
+model.load_state_dict(state_dict)
+```
+
+After loading the saved model, you can use it to make predictions on new data by passing your inputs through the model's `forward()` method."
+"A user is building a neural network model for image classification using PyTorch and Weights & Biases. They have defined the model parameters, configured the optimizer, and defined the training and validation steps using PyTorch Lightning. They want to log the minimum and maximum values of their metric during training to track their progress.
+","How can I use W&B to track the min and max of my metric during training?
+","You can use the `define_metric` function from Weights & Biases to define a custom metric that logs the minimum and maximum values of your metric during training. Here's an example of how you can use this function in your training loop:
+
+```python
+import wandb
+
+# define your metric
+metric = wandb.define_metric(""my_metric"", summary=""min_max"")
+
+# in your training loop
+for epoch in range(num_epochs):
+    for batch in dataloader:
+        # ... your training code here
+
+        # log your metric
+        metric.update(min=min_value, max=max_value)
+        wandb.log({""my_metric"": metric})
+```
+
+This will log the minimum and maximum values of your metric during training as a summary value in your W&B run. You can visualize this in the W&B dashboard to track your progress over time."
+"A deep learning engineer is building a convolutional neural network (CNN) to recognize handwritten digits from the MNIST dataset using PyTorch and Weights & Biases. They want to keep track of training and validation losses, as well as their model's accuracy, and log them on W&B.","What is the function of the `self.log()` method in PyTorch Lightning, and how can I use it to log my losses and accuracy in W&B?","The `self.log()` method is used to log information related to the training or validation step, which is then automatically logged to W&B. You can use it to log losses and accuracy by passing the name of the metric as the first argument, and the value as the second argument. For example, in the `training_step()` method, you can log the training loss and accuracy with `self.log('train_loss', loss)` and `self.log('train_accuracy', acc)`. Similarly, in the `validation_step()` method, you can log the validation loss and accuracy with `self.log('val_loss', loss)` and `self.log('val_accuracy', acc)`."
+"A user is training a neural network using PyTorch and tracking their experiments with W&B. They are interested in logging the minimum and maximum value of their validation accuracy during training.
+","How can I use W&B to log the minimum and maximum values of validation accuracy during training?
+","You can use wandb's `define_metric` function to define whether you'd like your W&B summary metric to display the min or max value. Once you have defined your metric, you can log `val_accuracy` in the `validation_step` method of your PyTorch Lightning `LightningModule`. The `val_accuracy` will be automatically tracked and you can visualize the min and max values in your W&B dashboard. Here is an example code snippet:
+
+```
+import wandb
+import pytorch_lightning as pl
+
+class MyModel(pl.LightningModule):
+    
+    def training_step(self, batch, batch_idx):
+        # training logic
+        self.log('train_loss', loss)
+        return {'loss': loss}
+
+    def validation_step(self, batch, batch_idx):
+        # validation logic
+        preds, loss, acc = self._get_preds_loss_accuracy(batch)
+        self.log('val_loss', loss)
+        self.log('val_accuracy', acc)
+        return {'val_loss': loss, 'val_accuracy': acc}
+
+    def configure_optimizers(self):
+        # optimizer config
+        return Adam(self.parameters(), lr=self.lr)
+
+wandb.init(project=""my-project"", config=args)
+wandb_logger = WandbLogger()
+checkpoint_callback = ModelCheckpoint(monitor='val_accuracy')
+trainer = Trainer(logger=wandb_logger,
+                  checkpoint_callback=checkpoint_callback,
+                  max_epochs=args.max_epochs,
+                  gpus=args.gpus)
+
+trainer.fit(model)
+```"
+"A user has shared a report with their team but is unsure if they can still edit it or if it is now view-only. They need clarification on report permissions.
+","Can I still edit a report after sharing it with my team?
+","If you share a report with your team, both the administrator and members who created the report can toggle permissions between edit or view access for other team members. If a user has edit access, they can still edit the report even after it has been shared. However, shared reports are view-only and can only be edited by those who have edit access. If you want to grant a team member edit access to a shared report, make sure to toggle their permissions accordingly."
+"A user has created a report on Weights & Biases and wants to share it with their team or coworkers. They want to know how to edit the access permissions and whether there are any restrictions on who can view or edit the shared report.
+","Can I control who can edit a report that I share with my team on Weights & Biases?
+","Yes, you can control who can edit a report on your team project by toggling permissions between edit or view access for other team members. Both the administrator and the member who created the report can do this. However, reports that are created within an individual's private project are only visible to that user. The user can share their project to a team or to the public. To share a report, select the **Share** button on the upper right-hand corner. You can either provide an email account or copy the magic link. Users invited by email will need to log in to Weights & Biases to view the report. Users who are given a magic link do not need to log in to Weights & Biases to view the report. Shared reports are view-only."
+"A user has just finished creating a report in Weights & Biases and wants to share it with a friend who doesn't have a Weights & Biases account.
+","Can I share my Weights & Biases report with a friend who doesn't have a W&B account?
+","Yes, you can share your Weights & Biases report with a friend who doesn't have a W&B account by providing them with a magic link. To do this, select the **Share** button on the upper right-hand corner of the report. Then, copy the magic link and provide it to your friend. Your friend will be able to view the report without having to log into Weights & Biases. However, note that shared reports are view-only."
+"A W&B user is working on a project with a team and wants to collaborate by sharing a report. They are not sure how to do this and what the restrictions are on who can edit and share the report.
+","How can I share my Weights and Biases report with my team, and who can edit and share it?
+","To share a report, first select the **Share** button on the upper right-hand corner of the report. You can either provide an email account or copy the magic link. Users invited by email will need to log into Weights & Biases to view the report, while users who are given a magic link do not need to log in. Reports that are created within an individual's private project are only visible to that user. The user can share their project to a team or to the public. On team projects, both the administrator, or member who created the report, can toggle permissions between edit or view access for other team members. Team members can share and edit reports."
+"A user is collaborating with a team on a shared project in Weights and Biases, but they're not sure how to give other team members edit access to a report they'd like to work on together.
+","How can I allow other team members to edit a report I created in a team project in Weights and Biases?
+","To allow other team members to edit a report you created in a team project, you can toggle the permissions between edit or view access for each member. You, as the administrator or report creator, can select the Share button on the upper right hand corner of the report and then select the team members you want to give edit access to. When you share the report, only the users you selected with edit access will be able to modify the report."
+"The user is interested in setting up a sweep configuration in Weights & Biases to optimize hyperparameters for a machine learning model. They have heard about sweeps but are not sure about the specifics and want to know how to start using them in their project.
+","Hi there! I have been working on a machine learning project and I am interested in using sweeps to optimize my hyperparameters. Can you explain to me how to set up a sweep configuration in Weights & Biases?
+","Sure thing! Setting up a sweep configuration in Weights & Biases is a simple process. Within a dictionary, you need to specify which hyperparameters you want to sweep over. Then you define the metric you want to maximize or minimize, and specify the optimization method you want to use for the sweep. Finally, you initialize the sweep and start running it with `wandb.agent`. You can easily visualize the results of your sweep in the W&B Sweep dashboard. For more detailed information on how to set up and run a sweep, please visit [Initialize sweeps](https://docs.wandb.ai/guides/sweeps/initialize-sweeps)."
+"The user is trying to understand how W&B sweeps work and how to create a sweep with a random search method. They want to know how to initialize and start a sweep from the W&B documentation.
+","What is a sweep identification number and how do I get it?
+","A sweep identification number is a unique identifier for a sweep. You can get the sweep identification number by initializing a sweep with the desired configuration options using the `wandb.sweep` function. The function returns the sweep identification number, which you can use for starting the sweep. For example, the following code initializes a sweep:
+```python
+sweep_id = wandb.sweep(sweep=sweep_configuration, project='my-first-sweep')
+```
+where `sweep_configuration` is a dictionary containing the configuration options for the sweep, and `'my-first-sweep'` is the name of the project for the sweep. Once the sweep is initialized, you can use the `sweep_id` to start the sweep with the `wandb.agent` function."
+"A user is trying to set up a search space sweep using Weights & Biases and is confused about how to initialize it.
+","How do I start a sweep with Weights & Biases?
+","To initialize a sweep with Weights & Biases, you need to first specify the hyperparameters you want to sweep over within a dictionary, then use the Sweep Controller to manage the sweep on the cloud or locally across one or more machines. To initialize a sweep, use the `wandb.sweep` API call to specify the sweep configuration and the project name. This will return a sweep identification number. Then, use the `wandb.agent` API call to start the sweep and execute the function on the specified number of runs. For more information about how to initialize and start sweeps, see [Initialize sweeps](https://docs.wandb.ai/guides/sweeps/initialize-sweeps) and [Search and stop algorithms locally](./local-controller.md)."
+"The user is trying to optimize hyperparameters for their deep learning model. They are interested in using W&B sweep functionality to automate their hyperparameter search process. They want to know what happens to the metric during a sweep and how to visualize their results.
+","How does W&B select the best set of hyperparameters during a sweep, and what is the default metric used to evaluate the performance of different models? How can I visualize my results after a sweep?
+","
+During a sweep, W&B tries to maximize or minimize a metric that you specify in the metric key. In our example, it is validation accuracy and minimal value (`'goal':'maximize'`). W&B compares the metric values for all runs and selects the ones that outperformed others according to the goal. You can also choose other metrics to optimize over, like loss or F1-score. 
+
+To visualize your sweep results, you can use the W&B Sweep dashboard. With just a few clicks, construct rich, interactive charts like parallel coordinates plots, parameter importance analyzes, and more. To open the dashboard, open your project, choose the sweep of interest, and click on ""Sweep"" in the project panel."
+"A user is working with W&B sweep configurations and wants to know how to track the sweep runs and their respective metrics.
+","How can I track my sweep runs and the metrics associated with each run?
+","To track your sweep runs and the corresponding metrics, use the `wandb.Sweep()` function to initialize a new sweep with a specified configuration. This function returns a sweep ID which can be used to start the sweep and log data for each run. Use the `wandb.agent()` function to start the sweep and log metrics for each run. W&B will automatically organize and visualize the sweep results in the sweep dashboard."
+"A user is working on a data science project with a team and frequently making changes to their dataset. They want to know how they can version their data and keep track of changes.
+","How can I version my datasets and keep track of changes in W&B?
+","In W&B, you can version your datasets using artifacts. When you make changes to your dataset, just re-run the artifact creation script and W&B will automatically create a new version with a unique identifier. You can also tag artifact versions with custom aliases, take notes on what changed, store metadata alongside each version, and see which experiment runs use a particular version. This helps keep your team working with the latest or a stable version of the data. To log an artifact, you can initialize a wandb run with the `job_type=""dataset-creation""` argument and then log the artifact using `run.log_artifact(artifact)`. Check out our documentation on [Datasets & Predictions](https://docs.wandb.ai/datasets-and-predictions) to learn more about artifact versioning in W&B."
+"A user is working with a large dataset for their machine learning project, and they have made several changes to the dataset over time. The user is concerned about keeping track of the different versions of the dataset and wants to know if there is a way to easily manage and track changes to the dataset.
+","How can I keep track of changes to my dataset and easily manage different versions of it in W&B?
+","W&B allows you to easily manage different versions of your dataset by automatically versioning artifacts. You can tag artifact versions with custom aliases, take notes on what changed, store metadata alongside each version, and see which experiment runs use a particular version. This way, you can be sure you're working with the latest or a stable version of the data. To log an artifact, you can use the following code:
+
+```
+run = wandb.init()
+artifact = wandb.Artifact('my-dataset', type='dataset')
+artifact.add_dir(""path/to/my/dataset"")
+
+# Log that artifact, and W&B will identify any changes and track the new version
+run.log_artifact(artifact)
+```
+
+You can also see the different versions of an artifact and their metadata in the W&B UI."
+"A data scientist is working on a project using various datasets and needs to keep track of their versioning and changes. They want to know how to organize their datasets and annotate them with notes or metadata.
+","How can I annotate my datasets with notes and metadata to keep track of their versioning and changes?
+","You can give your datasets custom names and add notes or key-value pairs to annotate them with metadata using Weights & Biases. This allows you to keep track of your dataset's versioning and changes. You can use the following code snippet to do so:
+
+```python
+artifact = wandb.Artifact('dataset-name', type='dataset')
+artifact.add_dir(""directory-containing-dataset"")
+
+# Add notes
+artifact.description = ""Dataset containing images for classification task""
+artifact.metadata = {""dataset_version"": ""1.0""}
+
+# Log artifact
+run.log_artifact(artifact)
+```
+By adding descriptions and metadata to your datasets, you can easily keep track of changes and the purpose of your datasets."
+"A data scientist is working on creating a new version of a dataset and wants to know how to tag the new version and add metadata to it for future reference.
+","How can I tag a new version of my dataset in W&B and add metadata to it for future reference?
+","To tag a new version of your dataset in W&B, you can log the updated dataset as a new artifact using the `log_artifact` function and giving it a custom name. For example, if you updated your ""nature-dataset"", you can create a new artifact with the name ""nature-dataset-v2"" and log it with `run.log_artifact(artifact, aliases=[""latest""])`. You can then add metadata to this new artifact by calling the `add_metadata` function and passing in a dictionary of key-value pairs. For instance, to add the date when the data was updated and a note about the changes made, you can use `artifact.add_metadata({""date_updated"":""2022-03-08"", ""notes"":""removed mislabeled examples from animal-ids.txt""})`. This way, you can easily access and identify this new version of your dataset in the future, and your team can have a clear understanding of what changes were made."
+"A user who is working on a project with multiple datasets is trying to keep track of changes made to different versions of the data, and wants to know if Weights & Biases can help with that.
+","Hey W&B bot, I'm working on a project that requires multiple datasets and I need to keep track of any changes I make. I was wondering if there's an easy way to version the datasets and maybe add some notes about the changes?
+","Yes, absolutely! Weights & Biases allows you to tag artifact versions with custom aliases, take notes on what changed, store metadata alongside each version, and see which experiment runs use a particular version. You can also give your datasets custom names and annotate them with notes or key-value pair metadata. This way, you can easily keep track of the changes made to each version of your data, while preserving the lineage and history of previous changes."
+"
+A user is running a PyTorch model with Weight & Biases integrated and wants to know the best way to log the model's weights and gradients to W&B.
+","
+How can I log the weights and gradients of my PyTorch model to W&B using the Wandb.watch() function?
+","
+To log the weights and gradients of your PyTorch model to W&B, you can use the `wandb.watch()` function. This function automatically logs gradients, weights, topology, and more. In the given code fragment, `wandb.watch()` is called to log the model and gradients to W&B. To activate logging for all features, `log=""all""` is added. If you only want to log gradients, you can use `log=""gradients""`. If you want to log all histogrammed tensors, you can use `log=""histogram""`. Finally, to log the network topology, you can use `log_graph=True`. 
+
+Here is a code example:
+
+```
+wandb.watch(model, log=""all"", log_graph=True)
+```
+
+This code should be added just before the epoch loop. With this line, your PyTorch model's weights and gradients will be successfully logged to W&B."
+"A user is training a deep learning model using PyTorch and W&B and they want to monitor the training process. They have already initialized a W&B project and logged in using their API key.
+","How do I monitor the model's gradients during training using WandB?
+","You can use the `wandb.watch()` function to monitor your model's gradients during training. It takes as input your PyTorch model and logs the gradients for all parameters, along with the parameter values and the forward and backward pass of the computation graph. In the code fragment you provided, `wandb.watch()` is used to log the model, gradients, and topology to W&B."
+"A user is trying to understand how to use the wandb watch functionality to log gradients and weights for their PyTorch model during training.
+","How do I activate logging of network topology using wandb.watch() while training my PyTorch model with Weights & Biases?
+","To activate logging of network topology using wandb.watch() while training your PyTorch model with Weights & Biases, you need to provide the `log` argument with `'all'` parameter to the `wandb.watch()` function. This will automatically log gradients, weights, topology and more. In the documentation fragment provided, you can see `wandb.watch(model, log=""all"", log_graph=True)`. This means Weights & Biases is logging all relevant information needed for debugging and optimization purposes, including network topology."
+"A user is trying to log the accuracy of their image classification model while training it using PyTorch. They are using Weights & Biases for experiment tracking and visualization.
+","How can I log the accuracy of my PyTorch image classification model using Wandb?
+","To log the accuracy of your PyTorch image classification model using Wandb, you can use `wandb.log` to log the average accuracy and `wandb.log` inside the validation loop to log the accuracy for each batch. Here's an example of how to do it:
+
+```
+# Inside the validation loop
+with torch.no_grad():
+    correct = 0
+    total = 0
+    for images, labels in test_loader:
+        images = images.to(device)
+        labels = labels.to(device)
+        outputs = model(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+    accuracy = 100 * correct / total
+    wandb.log({""valid/acc"": accuracy})
+    
+# Outside the validation loop
+wandb.log({""valid/avg_acc"": sum(accuracies) / len(accuracies)})
+``` 
+
+Note that this assumes you have already set up logging in your PyTorch code using `wandb.init`. If you haven't done that yet, you can find more information in the Wandb documentation."
+"A user is training a PyTorch model using Weights & Biases and is trying to log certain metrics during training.
+","How do I log the total number of parameters in my PyTorch model using Weights & Biases?
+","To log the total number of parameters in your PyTorch model using Weights & Biases, you can use the wandb.watch() function to automatically log the architecture and gradients of your model. After calling wandb.watch(), you can access the number of parameters in your model by calling the wandb.summary.num_parameters() function. Here is an example:
+
+```
+import torch
+import wandb
+import torchvision.models as models
+
+# Load a pre-trained ResNet-18 model
+model = models.resnet18(pretrained=True)
+
+# Log the model to W&B
+wandb.init(project=""my-project-name"", name=""resnet18"")
+wandb.watch(model)
+
+# Log the number of parameters to W&B
+n_params = wandb.summary.num_parameters()
+wandb.log({""num_parameters"": n_params})
+```"
+"The user is a machine learning engineer who has recently started using Weights & Biases to track their model performance. They have logged data tables in W&B for their last training run and now they want to visualize these tables in their workspace.
+","How can I view my logged tables in W&B workspace?
+","To view your logged tables in the W&B workspace, you need to follow these steps:
+
+1. Navigate to the W&B App and select the name of your Run in your Project workspace.
+2. Under the 'Data' tab, click on the 'Tables' sub-tab.
+3. From here, you can view all the tables that you have logged during your run. 
+
+In addition to this, you can also use the table filter, sort, and grouping features to explore your tables and compare different model versions."
+"A user is using W&B Tables to log and track data from a machine learning experiment. They want to be able to modify a table that has already been logged to add new data.
+","How can I modify a W&B table after it has been logged with new data?
+","Unfortunately, once a table has been logged to W&B, you cannot modify it directly. However, you have two options to add new data to an existing table:
+1. Log a new table with the same key as the original table, and the new data will be appended to the existing table in the workspace.
+2. Download the original table as a Pandas DataFrame using `wandb.Table(columns, data).to_dataframe()`. Append the new data to the DataFrame, and log the entire updated table using `wandb.Table.from_dataframe(new_dataframe)` with the same key as before."
+"A user is trying to log data tables and visualize them in W&B.
+","How can I make a table comparison across multiple runs in the W&B project workspace?
+","To compare tables across multiple W&B runs, first, you need to log sample tables from those runs. You can use the following code to log a table for each run:
+
+```python
+run = wandb.init(project=""my_project"")
+table_data = [[""john"", 25], [""linda"", 36]]
+table_columns = [""name"", ""age""]
+table = wandb.Table(columns=table_columns, data=table_data)
+run.log({""table_name"": table})
+```
+
+After logging tables from different runs, navigate to the W&B App and select your Project workspace. In your project workspace, you will see a list of all the runs you've logged tables to. You can then select two or more runs to compare their tables. Once selected, you'll see the compare view with a table comparison."
+"A user is interested in exploring how to compare their model performance across different runs using W&B Tables. They might have trained various models with different hyperparameters and want to compare their results to figure out which configuration works best for them.
+","Hi there! I saw that I can use W&B Tables to compare results across different runs. Can you explain how I can compare specific columns of my tables across multiple runs in the same project?
+","Sure, to compare specific columns of a table across multiple runs, you can use the W&B App's filter and grouping features. First, log the desired table with the columns you want to compare using the `run.log()` method, as described in Step 1 of the Quickstart Guide in the W&B Tables documentation. Then, when you navigate to the W&B App and select the name of your Project in the workspace, you should see a panel with a list of tables displayed. Click on the table you want to compare, and then select ""Group By"" to group the data according to specific columns. You can also filter the displayed data by selecting ""Filter"" and choosing a column along with the relevant values. With these features, you can compare specific columns of tables across runs, making it easy to analyze and compare model performance across different configurations."
+"A data scientist is trying to visualize the tables they have logged using Weights & Biases to make sure their training data looks as expected.
+","How can I visualize the tables that I have logged using Weights & Biases?
+","To visualize the tables that you have logged using Weights & Biases, you will need to navigate to the W&B App and select the name of your Run in your Project workspace. Then, select the panel that corresponds to the table you want to visualize. In the example given in the documentation, the table `my_table` was logged under the key `""Table Name""`, so you would select the corresponding panel. From there, you will be able to view the resulting table in your workspace."
+"A user has been exploring W&B documentation and has used the Public API to update tags for their runs. However, they are unsure how to remove tags and would like to know if it's possible to remove tags via the W&B UI.
+","Hi wandbot, I have been using W&B to track my runs and have been updating tags using the Public API. I was wondering if it's possible to remove tags from runs via the UI?
+","Yes, you can remove tags from runs via the UI. On the Project Page or Run Page, click on the run from which you'd like to remove the tag. For the Project Page, select the runs to which you'd like to apply the removal of tags. This can be done by hovering over a run in the table to see a checkbox on the left or look in the header row for a checkbox that will allow you to select all runs. Then, click the Tag button above the rows of runs. Find the tag you'd like to remove and click the ""X"" next to the tag. For the Run Page, click the top ""Overview tab"" on the left sidebar. Next to ""Tags"" is a gray ""➕"" button. Click on that button to add a tag. Find the tag you'd like to remove and click the ""X"" next to the tag."
+"A user has a project page with multiple runs that they have tagged with different labels. They want to remove a specific tag from a single run using the W&B UI.
+","Hi wandbot, I have a project page with multiple runs that are tagged with several labels. I accidentally added the wrong tag to one of the runs and I want to remove it. How can I do that using the UI?
+","To remove a tag from a single run using the UI, you can go to the specific run page. On the left sidebar, click on the ""Overview"" tab. Next to ""Tags"" is a gray ➕ button. Click on that plus to open a dialog that shows all the tags that are currently applied to the run. To remove a tag, click on the ""x"" button next to the tag you want to remove. This will unassign the tag from the run."
+"
+
+A user has been using Weights & Biases to track their machine learning experiments, and has been adding tags to their runs to easily keep track of their performance. However, they noticed that they made a typo in one of their tags and want to know how to remove it from the run.
+","
+
+Hi wandbot, how can I remove a tag from a run that I added by mistake?
+","
+
+Tags can be easily removed from runs via the UI. If you added a tag by mistake, you can remove it by following these steps:
+
+1. Go to the [Runs Table](../pages/project-page.md#search-for-runs) of the [Project Page](../pages/project-page.md) where the run you want to edit is located.
+2. Hover over the run you want to edit and press the checkbox button that appears on the left. You can also select the run by clicking the checkbox in the header row that selects all runs.
+3. With the run selected, click the Tag button above the rows of runs.
+4. Click on the tag you want to remove, and then click the `x` icon that appears next to it.
+
+The tag will be immediately removed from the selected run."
+"
+A W&B user has worked on a machine learning project and wants to apply tags to a new run created using their code. They have seen that in the W&B documentation there are different ways to apply tags, but they are not sure which method is the most suitable for their case. 
+","Hi wandbot, I want to apply tags to my new run. Should I use the Public API, the Project Page, or the Run Page?
+","To apply tags to your new run, you can use either the Public API, the Project Page, or the Run Page, depending on your needs. If you want to apply a tag to a large number of runs, the Project Page method is most suitable. If you want to apply a tag to a single run by hand, the Run Page method is recommended. If you prefer to use code, the Public API method is your best choice. You can find detailed instructions on how to apply tags using each method in the W&B documentation.
+
+For the Public API method, you can follow these steps:
+
+1. Import the wandb module and authenticate your API credentials.
+
+```python
+import wandb
+wandb.login()
+```
+
+2. Get the run with the specified id using the Api() method.
+
+```python
+run = wandb.Api().run(""{entity}/{project}/{run-id}"")
+```
+
+3. Append the tag to the run using the tags attribute.
+
+```python
+run.tags.append(""tag1"")
+```
+
+4. Finally, update the run using the update() method.
+
+```python
+run.update()
+```
+
+For the Project Page method, you can follow these steps:
+
+1. Open the runs sidebar on the Project Page.
+
+2. Click the table icon in the upper-right corner to expand the sidebar into the full runs table.
+
+3. Hover over a run in the table to see a checkbox on the left or look in the header row for a checkbox that will allow you to select all runs.
+
+4. Click the checkbox to enable bulk actions. Select the runs to which you'd like to apply your tag(s).
+
+5. Click the Tag button above the rows of runs.
+
+6. Type the tag you'd like to add and click ""Add"" below the text box to add a new tag.
+
+For the Run Page method, you can follow these steps:
+
+1. Open the Run Page for the run you want to add tags to.
+
+2. Click the Overview tab on the left sidebar.
+
+3. Click the gray + button next to ""Tags"".
+
+4. Type the tag you'd like to add and click ""Add"" below the text box to add a new tag."
+A user has created several runs and needs to add or remove tags to those runs in bulk.,How can I add or remove tags for multiple runs at once in W&B?,"
+
+To add tags in bulk, go to the [Project Page](../pages/project-page.md) and click the table icon in the runs sidebar. Hover over a run in the table to see a checkbox on the left or look in the header row for a checkbox that will allow you to select all runs. Click the checkbox to enable bulk actions. Select the runs to which you'd like to apply your tag(s), then click the Tag button above the runs. Type a tag you'd like to add and click ""Add"" below the text box to add it to the selected runs.
+
+To remove tags from multiple runs in bulk, follow the same steps as above for adding tags, but instead of adding tags, click ""Remove"" next to the tag you'd like to remove from the selected runs."
+"A user is training multiple versions of a Machine Learning model and wants to keep track of them. They have heard about Model Artifacts, Model Versions, and Registered Models with Weights & Biases, but they are not sure how to use them.
+","Hi! I have trained different versions of a Machine Learning model and I want to organize them and keep track of each version. I heard about Model Artifacts, Model Versions, and Registered Models with Weights & Biases, but I'm not sure which one to use for my purpose. Can you help me?
+","Sure! In W&B, a **Model Artifact** is a sequence of Model Versions, and each individual model being trained by the Run corresponds to its own Model Artifact, and each checkpoint corresponds to its own Model Version of the respective Model Artifact.
+
+To keep track of each version, you can create Model Versions for your trained models. A **Model Version** is an immutable directory of data, that typically stores whatever files are produced from the serialization process provided by your modeling library. For instance, if you are using PyTorch you can store the learned parameters using `torch.save(model.state_dict(), PATH)`. If you are using Keras you can use `model.save(filepath)`. You can then create a Model Version using `wandb.Artifact(""model-version"", type=""model"")` and add each file to the artifact using `artifact.add_file(PATH_TO_FILE)`. Finally, you can save the artifact using `run.log_artifact(artifact)`.
+
+If you want to organize your Model Versions and create ""bookmarks"" to versions that have specific purposes, you can use a **Registered Model**. A Registered Model is a set of links to Model Versions, and each ""version"" of a Registered Model is actually a link to a Model Version belonging to a Model Artifact of the same type. You typically create a Registered Model for each of your use cases or modeling tasks and use aliases like ""production"" or ""staging"" to denote versions with special purposes."
+"A user is working on training multiple versions of a machine learning model and wants to keep track of each version and its training progress. They are interested in using W&B for version control and tracking performance metrics for each model version.
+","Hi there, I'm training multiple versions of my machine learning model and want to use W&B for version control. Can you explain what a Model Version is in W&B?
+","
+
+Sure! In W&B, a Model Version is an immutable directory of data containing the learned parameters and architecture of a machine learning model. Each Model Version is identified by a unique hash and each hash corresponds to a specific version of the model. You have the flexibility to decide what files and formats are appropriate to store and restore your model's architecture and parameters. Typically, you will want to store whatever files are produced from the serialization process provided by your modeling library. For example, if you're using PyTorch for model training, you will save the model checkpoint to a file using the `torch.save()` function. This saved checkpoint can then be stored in the Model Version directory."
+A user is trying to organize their ML models and keep track of their versions using W&B.,I have created several different W&B runs that produced different versions of my trained models. How can I group them together and keep track of their versions?,"You can group your different model versions together using a Model Artifact in W&B. A Model Artifact consists of a sequence of Model Versions and can alias specific versions so that downstream consumers can pin to such aliases. You can create a Model Artifact for each individual model being trained by the run and each checkpoint corresponding to its own Model Version of the respective Model Artifact. Once you have created a Model Artifact, you can link it with a Registered Model, which is a set of links to Model Versions. A Registered Model can be accessed like a Model Artifact and acts like a folder of bookmarks, where each version of the Registered Model is actually a link to a Model Version belonging to a Model Artifact of the same type. You can create a Registered Model for each of your use cases or modeling tasks and use aliases like ""production"" or ""staging"" to denote versions with special purposes."
+"A user is trying to understand how to manage their model artifacts in W&B. They want to know how to create and access a registered model.
+","How do I create and access a registered model in W&B?
+","
+
+You can create and access a registered model in W&B by following these steps:
+1. First, create a Model Artifact by defining its type as `type=""model""`.
+2. Save your model architecture & learned parameters in the directory along with any additional files you want to include.
+3. Upload the created Model Artifact to W&B using the W&B API.
+4. Create a Registered Model by using the `wandb.artifacts.create()` method and passing it the entity name, project name, and registered model name.
+5. Finally, link the Model Versions to the Registered Model using `wandb.Artifact.add()`. 
+
+You can access the Registered Model exactly like the Model Artifact, identified by `[[entityName/]/projectName]/registeredModelName:versionAlias`. For example:
+
+```
+import wandb
+
+# create a new Model Artifact
+artifact = wandb.Artifact(""my-model"", type=""model"")
+artifact.add_file(""model.h5"")
+artifact.add_file(""README.md"")
+
+# upload the artifact to W&B
+run.log_artifact(artifact)
+
+# create a new Registered Model and link it to the Model Artifact
+rm = wandb.artifacts.create_registered_model(""my-registered-model"", ""description"")
+rm.add_version(artifact, ""v0"")
+rm.alias(""production"", ""v0"")
+
+# access the registered model
+reg_model_ref = ""[[entityName/]/projectName]/my-registered-model:production""
+reg_model = wandb.use_artifact(reg_model_ref)
+v0 = reg_model.get(""my-model:v0"")
+```"
+"A user is training multiple models in W&B and wants to ensure that they can easily access and compare the performance of each model. They are not familiar with W&B's model management features.
+","How can I keep track of all the different models I'm training in W&B and easily compare their performance?
+","In W&B, you can use Model Artifacts and Registered Models to manage and keep track of multiple versions of your model. A Model Version is an immutable directory of data that contains information about a specific version of your model. You can create a Model Artifact to group together multiple versions of your model. This makes it easy to compare the performance of different versions of your model over time. Additionally, you can create a Registered Model to create a set of links to Model Versions. This acts more like a folder of ""bookmarks"" for your Model Artifacts, making it easy to organize and keep track of your different models."
+"A user is interested in customizing the visualization of a W&B chart that displays precision and recall for different classes in their machine learning model. They have read the W&B documentation on custom charts but are having trouble with a specific part.
+","Hey there! I am trying to customize my chart in W&B to display precision and recall for different classes in my machine learning model. I followed the steps in the documentation to create a query, but I can't find where to set the Vega fields for the x-axis, y-axis, and color. Can you help me out?
+","Sure, I'd be happy to help! To set the Vega fields once you've created a query selecting the `historyTable`, simply go to the dropdown menus labeled ""x-axis"", ""y-axis"", and ""color"". Within each menu, you should see options to select the specific columns from your query. For this case, select `runSets_historyTable_r` for the x-axis (recall), `runSets_historyTable_p` for the y-axis (precision), and `runSets_historyTable_c` for the color (class label). That should do the trick!"
+"A user is trying to customize their chart on Weights & Biases and has successfully logged their data tables. They want to change their scatter plot to a line plot and add titles.
+","How can I change my scatter plot to a line plot and add titles to my customized chart on Weights and Biases?
+","
+To customize a chart on Weights and Biases, you need to go to your project page and click the **`+`** button to add a new panel, then select **Custom Chart**. Once you've selected the data from your log, click the **Edit** button to change the Vega spec for this built-in chart. To change a scatter plot to a line plot, modify the visualization in the Vega editor by changing the `""mark""` parameter from `""circle""` to `""line""`. Additionally, you can add a title to your chart by adding the `""title""` field in the Vega specification and setting a desired title, for example:
+
+```
+""title"": {
+    ""text"": ""My Customized Chart"",
+    ""fontSize"": 20,
+    ""fontWeight"": 500
+}
+```
+
+This will add a title to your chart that says ""My Customized Chart"" with a font size of 20px and a font weight of 500."
+A user wants to customize a chart in their W&B project.,How can I modify the color of the y-axis in my W&B custom chart to display another column of my data?,"
+To modify the color of your y-axis to display another column of data in W&B custom charts:
+
+1. Click on the `Custom Chart` button on your project page and add a query selecting the `historyTable` tab.
+2. In the `set vega fields` section, select the `runSets_historyTable_c` option located under `color`.
+3. Replace `runSets_historyTable_c` with the column name that you want to use for coloring in your query.
+4. Save your chart, and your y-axis should now display the selected column color."
+"A user has logged data for a classification task and now wants to create a custom chart using their logged data. They have gone through the initial steps of creating a query, but are having trouble customizing their chart to display specific features.
+","How can I change the chart type from a scatter plot to a line plot in W&B's custom chart feature?
+","To change the chart type to a line plot, first click on the ""Edit"" button for the chart you want to modify. In the ""Vega editor"" window that pops up, add the `""type"": ""line""` attribute to the `""mark""` object, and place this object within the `""encoding""` object. The final snippet of code should look something like this:
+
+> ""encoding"": {
+   ""x"": {""field"": ""runSets_historyTable_r"", ""type"": ""quantitative"", ""title"": ""Recall""},
+   ""y"": {""field"": ""runSets_historyTable_p"", ""type"": ""quantitative"", ""title"": ""Precision""},
+   ""color"": {""field"": ""runSets_historyTable_c"", ""type"": ""nominal"", ""title"": ""Class Label""},
+   ""tooltip"": [
+     {""field"": ""name"", ""type"": ""ordinal"", ""title"": ""Configuration""},
+     {""field"": ""run"", ""type"": ""ordinal"", ""title"": ""Run ID""},
+     {""field"": ""step"", ""type"": ""quantitative"", ""title"": ""Step""},
+     {""field"": ""runSets_historyTable_r"", ""type"": ""quantitative"", ""title"": ""Recall""},
+     {""field"": ""runSets_historyTable_p"", ""type"": ""quantitative"", ""title"": ""Precision""}
+   ],
+   ""mark"": {""type"": ""line""}
+ }
+
+Once you have added this attribute and saved your changes, you should see your chart updated to display a line plot."
+"A user is working on a machine learning project and has successfully logged data using W&B. Now they want to create a custom chart to visualize their results.
+","How can I create a custom chart in W&B to visualize my logged data?
+","To create a custom chart in W&B, go to your project page and click the **`+`** button to add a new panel, then select **Custom Chart**. After that, add a query by clicking `summary` and selecting `historyTable`. Type in the key where you logged the `wandb.Table()`. Once the query is loading in the necessary columns, you can set the Vega fields, including the x-axis, y-axis, and color. Finally, you can customize the chart by editing the Vega spec. For more details and a step-by-step guide, check out our [documentation](https://docs.wandb.ai/guides/charts/custom-charts)."
+"A user has been working on a machine learning project that involves tracking a dataset in Amazon S3 or GCS that feeds into a training job. They have read the Weights & Biases documentation about reference artifacts, but they are not sure how to tie everything together.
+","How can I make sure that my model is trained on the exact iteration of my data that I want it to be trained on, even as I evolve the contents of my bucket?
+","Weights & Biases uses the metadata recorded when the artifact was logged to retrieve the files from the underlying bucket when it downloads a reference artifact. If your bucket has object versioning enabled, Weights & Biases will retrieve the object version corresponding to the state of the file at the time an artifact was logged. This means that as you evolve the contents of your bucket, you can still point to the exact iteration of your data a given model was trained on since the artifact serves as a snapshot of your bucket at the time of training.
+
+In order to track a dataset in Amazon S3 or GCS that feeds into a training job, you can first create a new artifact using `wandb.Artifact()`. Then, you can add a reference to your dataset using `artifact.add_reference()`, specifying the path to your data in your bucket. Finally, you can log the artifact using `run.log_artifact()` to upload it to Weights & Biases. When it comes time to use the dataset for training, you can call `run.use_artifact()` to download the artifact and retrieve a local copy of your dataset as it existed at the time of training. Weights & Biases recommends that you enable 'Object Versioning' on your Amazon S3 or GCS buckets if you overwrite files as part of your workflow to ensure that artifacts with references to files that have been overwritten will still be intact because the older object versions are retained."
+"A user is working with reference artifacts in Weights & Biases, trying to download a dataset from Amazon S3 or GCS to use in a training job. They have encountered some issues and are seeking help.
+","I keep getting the error message ""no matching artifact found"" when trying to download a reference artifact from S3 bucket. What could be the possible reasons for this error?
+","
+There are several possible reasons why you are seeing the ""no matching artifact found"" error when attempting to download a reference artifact from an S3 bucket. One possible reason is that the artifact may have been deleted from the bucket, so it is no longer available for download. Another possible reason is that the bucket policy may be misconfigured, preventing Weights & Biases from reading the artifact. You can try checking the AWS policy that controls access to the S3 bucket, and ensure that Weights & Biases is granted permission to read the artifact. Additionally, you can try specifying a different version of the artifact, or check if the path or filename is correct. Finally, you can also check if the artifact type is correct and that you have successfully logged an artifact of that type."
+"A user is trying to download a reference artifact using W&B and encountering errors.
+","I am trying to download a reference artifact using W&B but I keep getting errors. How can I troubleshoot this?
+","To download a reference artifact, you can use the `use_artifact()` method of the `wandb` module. Make sure you are using the correct `type` parameter to indicate the type of artifact you are downloading. If you are encountering errors, make sure that the artifact exists and is accessible with the provided configuration. In some cases, rich media such as images, audio, video, and point clouds may fail to render properly in the App UI depending on the CORS configuration of your bucket. Allow listing `app.wandb.ai` in your bucket's CORS settings will allow the App UI to properly render such rich media."
+"A data scientist is trying to track and download an artifact in Weights & Biases library. They have read the documentation but are confused about the different ways to access the artifact and what is the best option for their specific use case.
+","I want to download a reference artifact from my Weights & Biases account. Can you explain the differences between using shared credentials file vs. a config file and what is the best practice?
+","There are different ways to access your reference artifacts in Weights & Biases, and the best option depends on your specific use case. If you plan to use the same credentials across multiple applications, you can store your credentials in a shared credentials file. On the other hand, if you want to store different configurations per application, you should use a config file. For more information on how to set up and use the different options, please refer to the documentation."
+"A user is working with reference artifacts in Weights & Biases, specifically trying to download one from an Amazon S3 or GCS bucket. They want to make sure they can properly access and manipulate the artifact while also ensuring version control.
+","How can I ensure proper version control when working with reference artifacts from an Amazon S3 or GCS bucket in Weights & Biases, especially if I overwrite files in my workflow?
+","Weights & Biases recommends enabling 'Object Versioning' on your Amazon S3 or GCS buckets if you overwrite files as part of your workflow. With versioning enabled, artifacts referenced to files that have been overwritten will still be intact since the older object versions are retained. Additionally, you can use the metadata recorded when the artifact was logged to retrieve the files from the underlying bucket when it downloads a reference artifact. As the contents of your bucket change, you can still refer to the exact iteration of your data that a given model was trained on. In order to download a reference artifact, you can follow the code example provided in the documentation fragment - initializing Weights & Biases, creating an artifact, adding a reference to the artifact of your choice, and then downloading the artifact itself."
+"A data science team uses Weights & Biases to track and log their machine learning experiments. The team is expanding, and they have recently added a new member who needs access to their shared projects and experiments.",How can I invite a new member to my team and grant them access to our shared projects and experiments using Weights & Biases?,"
+To invite new members to your Weights & Biases team:
+1. Ensure the team member already has a [W&B Account](https://app.wandb.ai/login?signup=true). 
+2. Navigate to https://wandb.ai/subscriptions. 
+3. Select **Manage members**.
+4. Provide the username or email for the **Email or Username** field, select a team for them to join from the **Team** dropdown menu, and select a role type from the **Organizational Role** dropdown menu. 
+5. Select the **Add** button.
+
+After following these steps, the new member will have access to the projects and experiments that their role type allows them to see."
+"A user is new to W&B and has just created a team to collaborate with others on a project. They are now interested in customizing their team profile in order to present their best public reports and make it easier for teammates to find active projects and collaborators.
+","Hi, I just created a team on W&B and I'm wondering if there's a way to customize the team's profile page. I'd like to highlight our best research to visitors and showcase the most active projects to make it easier for my teammates to find them. Is this possible with W&B?
+","Yes, you can customize your team's profile page on W&B in order to showcase reports and projects that are visible to both public visitors and team members. You can highlight your best research to visitors by showcasing your best public reports, and showcase the most active projects to make it easier for teammates to find them. Additionally, you can find collaborators by adding external links to your company or research lab's website and any papers you've published. To customize your team's profile page, navigate to your team's settings page and click ""Profile"". From there, you can add an introduction, present reports, projects, and external links."
+"A data science team has just started using W&B for collaborative work. The team admin wants to add a new member to the team and grant them appropriate permissions to access and contribute to the team's projects and runs. However, the admin is not sure how to invite new members and assign their roles.",How can I invite a new member to my W&B team and assign their role?,"
+To invite a new member to your W&B team and assign their role, follow these four steps:
+
+1. Ensure the team member already has a W&B account. If not, they need to sign up using the link [here](https://app.wandb.ai/login?signup=true).
+2. Navigate to https://wandb.ai/subscriptions. 
+3. Select **Manage members**.
+4. Provide the username or email for the **Email or Username** field, select a team for them to join from the **Team** dropdown menu, and select a role type from the **Organizational Role** dropdown menu. 
+
+The four role types are Admin, Member, Viewer, and Writer. The Admin role has full deletion and permission rights over all projects and runs of the team. A Member can access and contribute to the team's projects and runs, but does not have admin rights. A Viewer can only access the team's projects, but cannot contribute or modify. A Writer can access the team's projects, but can only add runs and not modify them. Once you have filled out the form, select the **Add** button to invite the new member to your team with the assigned role."
+"
+
+A user is part of a team on W&B and they want to add their colleague to the team so they can collaborate on a project. They want to know the steps to invite their colleague to the team and how to grant them permissions. 
+","
+
+How do I invite a colleague to my W&B team and assign them as team member?
+","
+
+To invite a new team member to your W&B team, follow these steps:
+
+1. Ensure that your colleague already has a W&B account. If not, they can [sign up for free here](https://app.wandb.ai/login?signup=true).
+2. Click on the **Invite Team** button on the navigation bar.
+3. Create a new team or select the team you want to invite the user to.
+4. Enter your colleague's email address or username in the **Email or Username** field on the **Manage members** page.
+5. Select the team you want them to join from the **Team** dropdown menu and select either **Admin** or **Member** as their **Organizational Role**.
+6. Once you're done, click the **Add** button to send the invitation.
+
+Note that if you have an Enterprise account, you should contact your Account Executive to invite new members to your team. 
+
+If your colleague is already a team member, they can be granted permissions through their **Organizational Role**. The **Admin** role has permissions to modify all projects and full deletion permissions while a **Member** can't invite new members."
+A W&B team admin who needs to remove a departing team member from their organization,"Hi there, I need to remove a team member from my organization. Could you tell me how to do it using W&B?","Sure! To remove a team member from your organization, follow these steps:
+1. Open the team settings page.
+2. Click the delete button next to the departing member's name.
+Any runs that they logged to the team will remain after the user is removed."

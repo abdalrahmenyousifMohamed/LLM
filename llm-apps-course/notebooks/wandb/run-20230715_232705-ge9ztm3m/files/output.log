@@ -1,0 +1,33 @@
+[1135, 2337, 1222, 8436, 1386, 318, 7427, 0]
+Weights & Biases is awesome!
+1135	We
+2337	ights
+1222	 &
+8436	 Bi
+1386	ases
+318	 is
+7427	 awesome
+0	!
+'TEMP: 0, GENERATION: \n\nHi there! How can I help you?'
+'TEMP: 0.5, GENERATION: \n\nHi there! How can I help you?'
+'TEMP: 1, GENERATION: \n\nHey there! How are you doing?'
+('TOP_P: 0.01, GENERATION: \n'
+ '\n'
+ 'Weights & Biases is an amazing tool for tracking and analyzing machine '
+ 'learning experiments. It provides powerful visualizations and insights into '
+ 'model performance, enabling data scientists to quickly identify areas of '
+ 'improvement and optimize their models.')
+('TOP_P: 0.1, GENERATION: \n'
+ '\n'
+ 'Weights & Biases is an amazing tool for tracking and analyzing machine '
+ 'learning experiments. It provides powerful visualizations and insights into '
+ 'model performance, enabling data scientists to quickly identify areas of '
+ 'improvement and optimize their models.')
+('Weights & Biases is a powerful tool for machine learning experimentation and '
+ 'collaboration. It provides a seamless way to track and visualize your '
+ 'machine learning experiments, making it easier to understand and iterate on '
+ 'your models. With features like experiment tracking, hyperparameter '
+ 'optimization, and model versioning, Weights & Biases helps streamline the '
+ 'machine learning workflow and improve productivity. Whether you are a '
+ 'researcher, data scientist, or machine learning engineer, Weights & Biases '
+ 'can be a valuable addition to your toolkit.')
