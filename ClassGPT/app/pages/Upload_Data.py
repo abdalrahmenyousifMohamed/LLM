@@ -3,7 +3,7 @@ from components.sidebar import sidebar
 from s3 import S3
 
 sidebar()
-bucket_name = "classgptbucket"
+bucket_name = "truelensvertx"
 s3 = S3(bucket_name)
 all_classes = s3.list_files()
 
