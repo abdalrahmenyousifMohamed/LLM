@@ -32,8 +32,8 @@ def sidebar():
 
             This tool is a work in progress.
 
-            Contributions are welcomed on [GitHub](https://github.com/benthecoder/ClassGPT)
+            Contributions are welcomed on [GitHub](https://github.com/abdalrahmenyousifMohamed)
 
-            Made with ♥️ by [Benedict Neo](https://benneo.super.site/)
+            Made with ♥️ by [Abdo Yousef]
             """
         )
