@@ -31,7 +31,7 @@ sidebar()
 
 st.header("Abdo AI: Analyze Any PDF files you Want (;")
 
-bucket_name = "classgptbucket"
+bucket_name = "truelensvertx"
 s3 = S3(bucket_name)
 
 all_classes = s3.list_files()
